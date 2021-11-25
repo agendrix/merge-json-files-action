@@ -88,11 +88,15 @@ function run() {
             const fileTwopath = core.getInput("file_2_path", { required: true });
             const fileOne = JSON.parse(fs_1.readFileSync(fileOnepath).toString());
             const fileTwo = JSON.parse(fs_1.readFileSync(fileTwopath).toString());
-            const mergedFile = Object.assign(Object.assign({}, fileOne), fileTwo);
+            const mergedFile = Object();
+            [...fileOne, ...fileTwo].forEach(item => {
+                mergedFile[item.name] = item;
+            });
             const tmpFilePath = `/tmp/${crypto_1.randomBytes(16).toString("hex")}.json`;
-            fs_1.writeFileSync(tmpFilePath, JSON.stringify(mergedFile));
+            const mergedFileContent = JSON.stringify(Object.values(mergedFile));
+            fs_1.writeFileSync(tmpFilePath, mergedFileContent);
             console.log(`Merge file was successfully written to ${tmpFilePath} with the following content:`);
-            console.log(JSON.stringify(mergedFile));
+            console.log(mergedFileContent);
             core.setOutput("merged_file_path", tmpFilePath);
         }
         catch (error) {

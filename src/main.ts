@@ -13,15 +13,19 @@ async function run(): Promise<void> {
     const fileOne = JSON.parse(readFileSync(fileOnepath).toString());
     const fileTwo = JSON.parse(readFileSync(fileTwopath).toString());
 
-    const mergedFile = { ...fileOne, ...fileTwo };
-    const tmpFilePath = `/tmp/${randomBytes(16).toString("hex")}.json`;
+    const mergedFile = Object();
+    [...fileOne, ...fileTwo].forEach(item => {
+      mergedFile[item.name] = item;
+    });
 
-    writeFileSync(tmpFilePath, JSON.stringify(mergedFile));
+    const tmpFilePath = `/tmp/${randomBytes(16).toString("hex")}.json`;
+    const mergedFileContent = JSON.stringify(Object.values(mergedFile));
+    writeFileSync(tmpFilePath, mergedFileContent);
 
     console.log(
       `Merge file was successfully written to ${tmpFilePath} with the following content:`
     );
-    console.log(JSON.stringify(mergedFile));
+    console.log(mergedFileContent);
 
     core.setOutput("merged_file_path", tmpFilePath);
   } catch (error) {
