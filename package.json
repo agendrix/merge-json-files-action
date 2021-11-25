@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
-  "version": "0.0.0",
+  "name": "merge-json-files",
+  "version": "1.0.0",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "Merge two json files into one. If a key collision occurs, the priority is given to file 2.",
   "main": "lib/src/main.js",
   "scripts": {
     "build": "tsc",
@@ -10,14 +10,14 @@
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts helpers/**/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "all": "yarn build && yarn format && yarn lint && yarn package && yarn test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/agendrix/merge-json-files-action.git"
   },
-  "author": "",
+  "author": "l.boudreau@agendrix.com",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.6",

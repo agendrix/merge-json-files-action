@@ -1,11 +1,13 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: Merge json files
+description: Merge two json files into one. If a key collision occurs, the priority is given to file 2.
+author: 'l.boudreau@agendrix.com'
 inputs:
-  milliseconds: # change this
+  file_1_path:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: Path of the first json file
+  file_2_path:
+    required: true
+    description: Path of the first json file
 runs:
   using: 'node12'
   main: 'dist/index.js'

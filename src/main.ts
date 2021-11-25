@@ -1,18 +1,25 @@
 import * as core from "@actions/core";
-import { wait } from "./wait";
+import { randomBytes } from "crypto";
+import { readFileSync, writeFileSync } from "fs";
+import { validateRequiredInputs } from "../helpers/action/validateRequiredInputs";
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput("milliseconds");
-    core.debug(`Waiting ${ms} milliseconds ...`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+    validateRequiredInputs(["file_1_path", "file_2_path"]);
 
-    core.debug(new Date().toTimeString());
-    await wait(parseInt(ms, 10));
-    core.debug(new Date().toTimeString());
+    const fileOnepath = core.getInput("file_1_path", { required: true });
+    const fileTwopath = core.getInput("file_2_path", { required: true });
 
-    core.setOutput("time", new Date().toTimeString());
+    const fileOne = JSON.parse(readFileSync(fileOnepath).toString());
+    const fileTwo = JSON.parse(readFileSync(fileTwopath).toString());
+
+    const mergedFile = { ...fileOne, ...fileTwo };
+    const tmpFilePath = `/tmp/${randomBytes(16).toString("hex")}.json`;
+    writeFileSync(tmpFilePath, JSON.stringify(mergedFile));
+
+    core.setOutput("merged_file_path", tmpFilePath);
   } catch (error) {
-    core.setFailed(error.message);
+    core.setFailed(`Action failed with error ${error}`);
   }
 }
 

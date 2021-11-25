@@ -3,6 +3,46 @@ require('./sourcemap-register.js');module.exports =
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 119:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.validateRequiredInputs = void 0;
+const core = __importStar(__nccwpck_require__(186));
+/**
+ * Validate that all required inputs were provided
+ * If not, it will throw.
+ */
+function validateRequiredInputs(requiredInputs) {
+    for (const requiredInput of requiredInputs) {
+        core.getInput(requiredInput, { required: true });
+    }
+}
+exports.validateRequiredInputs = validateRequiredInputs;
+
+
+/***/ }),
+
 /***/ 536:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -37,53 +77,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
-const wait_1 = __nccwpck_require__(954);
+const crypto_1 = __nccwpck_require__(417);
+const fs_1 = __nccwpck_require__(747);
+const validateRequiredInputs_1 = __nccwpck_require__(119);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const ms = core.getInput("milliseconds");
-            core.debug(`Waiting ${ms} milliseconds ...`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-            core.debug(new Date().toTimeString());
-            yield wait_1.wait(parseInt(ms, 10));
-            core.debug(new Date().toTimeString());
-            core.setOutput("time", new Date().toTimeString());
+            validateRequiredInputs_1.validateRequiredInputs(["file_1_path", "file_2_path"]);
+            const fileOnepath = core.getInput("file_1_path", { required: true });
+            const fileTwopath = core.getInput("file_2_path", { required: true });
+            const fileOne = JSON.parse(fs_1.readFileSync(fileOnepath).toString());
+            const fileTwo = JSON.parse(fs_1.readFileSync(fileTwopath).toString());
+            const mergedFile = Object.assign(Object.assign({}, fileOne), fileTwo);
+            const tmpFilePath = `/tmp/${crypto_1.randomBytes(16).toString("hex")}.json`;
+            fs_1.writeFileSync(tmpFilePath, JSON.stringify(mergedFile));
+            core.setOutput("merged_file_path", tmpFilePath);
         }
         catch (error) {
-            core.setFailed(error.message);
+            core.setFailed(`Action failed with error ${error}`);
         }
     });
 }
 run();
-
-
-/***/ }),
-
-/***/ 954:
-/***/ (function(__unused_webpack_module, exports) {
-
-
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.wait = void 0;
-function wait(milliseconds) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return new Promise(resolve => {
-            if (isNaN(milliseconds)) {
-                throw new Error("milliseconds not a number");
-            }
-            setTimeout(() => resolve("done!"), milliseconds);
-        });
-    });
-}
-exports.wait = wait;
 
 
 /***/ }),
@@ -474,6 +489,13 @@ function toCommandValue(input) {
 }
 exports.toCommandValue = toCommandValue;
 //# sourceMappingURL=utils.js.map
+
+/***/ }),
+
+/***/ 417:
+/***/ ((module) => {
+
+module.exports = require("crypto");;
 
 /***/ }),
 
