@@ -91,6 +91,8 @@ function run() {
             const mergedFile = Object.assign(Object.assign({}, fileOne), fileTwo);
             const tmpFilePath = `/tmp/${crypto_1.randomBytes(16).toString("hex")}.json`;
             fs_1.writeFileSync(tmpFilePath, JSON.stringify(mergedFile));
+            console.log(`Merge file was successfully written to ${tmpFilePath} with the following content:`);
+            console.log(JSON.stringify(mergedFile));
             core.setOutput("merged_file_path", tmpFilePath);
         }
         catch (error) {

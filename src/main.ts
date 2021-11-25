@@ -15,7 +15,13 @@ async function run(): Promise<void> {
 
     const mergedFile = { ...fileOne, ...fileTwo };
     const tmpFilePath = `/tmp/${randomBytes(16).toString("hex")}.json`;
+
     writeFileSync(tmpFilePath, JSON.stringify(mergedFile));
+
+    console.log(
+      `Merge file was successfully written to ${tmpFilePath} with the following content:`
+    );
+    console.log(JSON.stringify(mergedFile));
 
     core.setOutput("merged_file_path", tmpFilePath);
   } catch (error) {

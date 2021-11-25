@@ -8,6 +8,9 @@ inputs:
   file_2_path:
     required: true
     description: Path of the first json file
+outputs:
+  merged_file_path:
+    description: Path to the merged json file 
 runs:
   using: 'node12'
   main: 'dist/index.js'
