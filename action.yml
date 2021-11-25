@@ -3,10 +3,10 @@ description: Merge two json files into one. If a key collision occurs, the prior
 author: 'l.boudreau@agendrix.com'
 inputs:
   file_1_path:
-    required: true
+    required: false
     description: Path of the first json file
   file_2_path:
-    required: true
+    required: false
     description: Path of the first json file
 outputs:
   merged_file_path:

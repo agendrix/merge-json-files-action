@@ -3,18 +3,21 @@ import { randomBytes } from "crypto";
 import { readFileSync, writeFileSync } from "fs";
 import { validateRequiredInputs } from "../helpers/action/validateRequiredInputs";
 
+const fileValues = (path: string) =>
+  path ? JSON.parse(readFileSync(path).toString()) : [];
+
 async function run(): Promise<void> {
   try {
     validateRequiredInputs(["file_1_path", "file_2_path"]);
 
-    const fileOnepath = core.getInput("file_1_path", { required: true });
-    const fileTwopath = core.getInput("file_2_path", { required: true });
+    const fileOnepath = core.getInput("file_1_path", { required: false });
+    const fileTwopath = core.getInput("file_2_path", { required: false });
 
-    const fileOne = JSON.parse(readFileSync(fileOnepath).toString());
-    const fileTwo = JSON.parse(readFileSync(fileTwopath).toString());
+    const fileOneValues = fileValues(fileOnepath);
+    const fileTwoValues = fileValues(fileTwopath);
 
     const mergedFile = Object();
-    [...fileOne, ...fileTwo].forEach(item => {
+    [...fileOneValues, ...fileTwoValues].forEach(item => {
       mergedFile[item.name] = item;
     });
 

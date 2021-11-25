@@ -80,16 +80,17 @@ const core = __importStar(__nccwpck_require__(186));
 const crypto_1 = __nccwpck_require__(417);
 const fs_1 = __nccwpck_require__(747);
 const validateRequiredInputs_1 = __nccwpck_require__(119);
+const fileValues = (path) => path ? JSON.parse(fs_1.readFileSync(path).toString()) : [];
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             validateRequiredInputs_1.validateRequiredInputs(["file_1_path", "file_2_path"]);
-            const fileOnepath = core.getInput("file_1_path", { required: true });
-            const fileTwopath = core.getInput("file_2_path", { required: true });
-            const fileOne = JSON.parse(fs_1.readFileSync(fileOnepath).toString());
-            const fileTwo = JSON.parse(fs_1.readFileSync(fileTwopath).toString());
+            const fileOnepath = core.getInput("file_1_path", { required: false });
+            const fileTwopath = core.getInput("file_2_path", { required: false });
+            const fileOneValues = fileValues(fileOnepath);
+            const fileTwoValues = fileValues(fileTwopath);
             const mergedFile = Object();
-            [...fileOne, ...fileTwo].forEach(item => {
+            [...fileOneValues, ...fileTwoValues].forEach(item => {
                 mergedFile[item.name] = item;
             });
             const tmpFilePath = `/tmp/${crypto_1.randomBytes(16).toString("hex")}.json`;
