@@ -8,9 +8,9 @@ const fileValues = (path: string) =>
 
 async function run(): Promise<void> {
   try {
-    const fileOnepath = core.getInput("file_1_path", { required: false });
-    const fileTwopath = core.getInput("file_2_path", { required: false });
-    const key = core.getInput("key", { required: false });
+    const key = core.getInput("key");
+    const fileOnepath = core.getInput("file_1_path");
+    const fileTwopath = core.getInput("file_2_path");
 
     const fileOneValues = fileValues(fileOnepath);
     const fileTwoValues = fileValues(fileTwopath);

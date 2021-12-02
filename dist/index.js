@@ -43,9 +43,9 @@ const fileValues = (path) => path ? JSON.parse(fs_1.readFileSync(path).toString(
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const fileOnepath = core.getInput("file_1_path", { required: false });
-            const fileTwopath = core.getInput("file_2_path", { required: false });
-            const key = core.getInput("key", { required: false });
+            const key = core.getInput("key");
+            const fileOnepath = core.getInput("file_1_path");
+            const fileTwopath = core.getInput("file_2_path");
             const fileOneValues = fileValues(fileOnepath);
             const fileTwoValues = fileValues(fileTwopath);
             const mergedFile = Object();
