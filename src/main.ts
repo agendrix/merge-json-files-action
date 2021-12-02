@@ -12,13 +12,14 @@ async function run(): Promise<void> {
 
     const fileOnepath = core.getInput("file_1_path", { required: false });
     const fileTwopath = core.getInput("file_2_path", { required: false });
+    const key = core.getInput("key", { required: false });
 
     const fileOneValues = fileValues(fileOnepath);
     const fileTwoValues = fileValues(fileTwopath);
 
     const mergedFile = Object();
     [...fileOneValues, ...fileTwoValues].forEach(item => {
-      mergedFile[item.name] = item;
+      mergedFile[item[key]] = item;
     });
 
     const tmpFilePath = `/tmp/${randomBytes(16).toString("hex")}.json`;

@@ -2,6 +2,10 @@ name: Merge json files
 description: Merge two json files into one. If a key collision occurs, the priority is given to file 2.
 author: 'l.boudreau@agendrix.com'
 inputs:
+  key: 
+    required: false
+    description: "Name of the field that uniquely identifies an item"
+    default: "name"
   file_1_path:
     required: false
     description: Path of the first json file
