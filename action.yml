@@ -16,5 +16,5 @@ outputs:
   merged_file_path:
     description: Path to the merged json file 
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
