@@ -1,7 +1,6 @@
 import * as core from "@actions/core";
 import { randomBytes } from "crypto";
 import { readFileSync, writeFileSync } from "fs";
-import { validateRequiredInputs } from "../helpers/action/validateRequiredInputs";
 
 const fileValues = (path: string) =>
   path ? JSON.parse(readFileSync(path).toString()) : [];
@@ -9,14 +8,11 @@ const fileValues = (path: string) =>
 async function run(): Promise<void> {
   try {
     const key = core.getInput("key");
-    const fileOnepath = core.getInput("file_1_path");
-    const fileTwopath = core.getInput("file_2_path");
-
-    const fileOneValues = fileValues(fileOnepath);
-    const fileTwoValues = fileValues(fileTwopath);
+    const filesPath = core.getMultilineInput("files_path");
+    const filesValues = filesPath.map(fileValues).flat();
 
     const mergedFile = Object();
-    [...fileOneValues, ...fileTwoValues].forEach(item => {
+    filesValues.forEach(item => {
       mergedFile[item[key]] = item;
     });
 

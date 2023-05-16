@@ -1,17 +1,14 @@
 name: Merge json files
-description: Merge two json files into one. If a key collision occurs, the priority is given to file 2.
+description: Merge json files into one. If a key collision occurs, the priority is given to the file file with the highest index in the array.
 author: 'l.boudreau@agendrix.com'
 inputs:
   key: 
     required: false
     description: "Name of the field that uniquely identifies an item"
     default: "name"
-  file_1_path:
-    required: false
-    description: Path of the first json file
-  file_2_path:
-    required: false
-    description: Path of the first json file
+  files_path:
+    required: true
+    description: Path of the json files
 outputs:
   merged_file_path:
     description: Path to the merged json file 

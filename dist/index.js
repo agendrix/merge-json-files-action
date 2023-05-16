@@ -9,11 +9,7 @@ require('./sourcemap-register.js');module.exports =
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -30,43 +26,30 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
 const crypto_1 = __nccwpck_require__(417);
 const fs_1 = __nccwpck_require__(747);
-const fileValues = (path) => path ? JSON.parse((0, fs_1.readFileSync)(path).toString()) : [];
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const key = core.getInput("key");
-            const fileOnepath = core.getInput("file_1_path");
-            const fileTwopath = core.getInput("file_2_path");
-            const fileOneValues = fileValues(fileOnepath);
-            const fileTwoValues = fileValues(fileTwopath);
-            const mergedFile = Object();
-            [...fileOneValues, ...fileTwoValues].forEach(item => {
-                mergedFile[item[key]] = item;
-            });
-            const tmpFilePath = `/tmp/${(0, crypto_1.randomBytes)(16).toString("hex")}.json`;
-            const mergedFileContent = JSON.stringify(Object.values(mergedFile));
-            (0, fs_1.writeFileSync)(tmpFilePath, mergedFileContent);
-            console.log(`Merge file was successfully written to ${tmpFilePath} with the following content:`);
-            console.log(mergedFileContent);
-            core.setOutput("merged_file_path", tmpFilePath);
-        }
-        catch (error) {
-            core.setFailed(`Action failed with error ${error}`);
-        }
-    });
+const fileValues = (path) => path ? JSON.parse(fs_1.readFileSync(path).toString()) : [];
+async function run() {
+    try {
+        const key = core.getInput("key");
+        const filesPath = core.getMultilineInput("files_path");
+        const filesValues = filesPath.map(fileValues).flat();
+        const mergedFile = Object();
+        filesValues.forEach(item => {
+            mergedFile[item[key]] = item;
+        });
+        const tmpFilePath = `/tmp/${crypto_1.randomBytes(16).toString("hex")}.json`;
+        const mergedFileContent = JSON.stringify(Object.values(mergedFile));
+        fs_1.writeFileSync(tmpFilePath, mergedFileContent);
+        console.log(`Merge file was successfully written to ${tmpFilePath} with the following content:`);
+        console.log(mergedFileContent);
+        core.setOutput("merged_file_path", tmpFilePath);
+    }
+    catch (error) {
+        core.setFailed(`Action failed with error ${error}`);
+    }
 }
 run();
 
